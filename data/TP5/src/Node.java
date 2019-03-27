@@ -5,6 +5,9 @@ public class Node {
 	private String name;
 	private int longitude;
 	private int altitude;
+	//ajout d'un attribut
+	public int distance;
+	
 	
 	public Node(int id, String n, int longitude, int altitude) {
 		this.id = id;

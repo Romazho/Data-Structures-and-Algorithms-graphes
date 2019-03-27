@@ -14,7 +14,7 @@ public class Edge {
 		// A completer
 	}
      
-         public Edge(Node s, Node d) {
+        public Edge(Node s, Node d) {
 		this.source = s;
 		this.destination = d;
 		// A completer

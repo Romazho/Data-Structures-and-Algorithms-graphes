@@ -20,8 +20,37 @@ public class Dijkstra {
 		dijkstraTable = new HashMap[graph.getNodes().size()];
 		path = new Stack<Edge>();
 		
+		//4C dans le tableau a la place de 4D a la palce E5.
+		
 		// A compléter
-
+		
+		boolean trouve = false;
+		final int INFINITY = 99999;
+		for(int i=0;i < graph.getNodes().size();++i) {
+			graph.getNodes().get(i).distance = INFINITY;
+		}
+		/*
+		for(Node node : graph.getNodes()) {
+			node.distance = INFINITY;
+		}
+		*/
+		s.distance = 0;
+		
+		//dijkstraTable[0].
+		
+		while(trouve == false) {
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		}
+		
 		
 	}
 
@@ -37,6 +66,13 @@ public class Dijkstra {
 
 	private Edge getMinimum (Edge e1, Edge e2) {
 		// A completer
+		//pas finit... faire attention aux objets nulls...
+		if( e1.getDistance() < e2.getDistance() ) {
+			return e1;
+		}
+		else {
+			return e2;
+		}
 	}
 	
 	public String afficherCourtChemin (Node source, Node destination) {
