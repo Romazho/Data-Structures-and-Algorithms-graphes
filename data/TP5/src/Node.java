@@ -7,13 +7,22 @@ public class Node {
 	private int altitude;
 	//ajout d'un attribut
 	public int distance;
+	public boolean found;
 	
+	public Node() {
+		this.id 	= 0;
+		this.name = "0";
+		this.longitude = 0;
+		this.altitude = 0;
+		this.found = false;
+	};
 	
 	public Node(int id, String n, int longitude, int altitude) {
 		this.id = id;
 		this.name = n;
 		this.longitude = longitude;
 		this.altitude = altitude;
+		this.found = false;
 	}
 
         public Node(int id, String n) {
@@ -21,8 +30,15 @@ public class Node {
 		this.name = n;
 		this.longitude = 0; 
 		this.altitude = 0;
+		this.found = false;
 	}
-	
+        public Node(Node node) {
+    		this.id = node.id;
+    		this.name = node.name;
+    		this.longitude = node.longitude; 
+    		this.altitude = node.altitude;
+    		this.found = node.found;
+        } 
 	
 	public int getId() {
 		return id;

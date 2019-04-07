@@ -23,6 +23,12 @@ public class Edge {
 
 	}
 	
+     public Edge (Edge edge) {
+    	 this.destination = new Node(edge.destination);
+    	 this.distance =  edge.distance; 
+    	 this.source = new Node(edge.destination);
+     }
+        
 	public Node getSource() {
 		return source;
 	}

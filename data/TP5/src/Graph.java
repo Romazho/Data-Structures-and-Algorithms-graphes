@@ -13,7 +13,16 @@ public class Graph {
 	}
 	
 	public Graph(Graph g) {
-		List<Node>
+		nodes = new ArrayList<Node>();
+		edges = new ArrayList<Edge>();
+		
+		for(int i = 0; i < g.getNodes().size();++i) {
+			nodes.add(new Node(g.getNodes().get(i)));
+		}
+		for(int i = 0; i < g.getEdges().size();++i) {
+			edges.add(new Edge(g.getEdges().get(i)));
+		}
+		
 	}
 	
 	public List<Edge> getEdgesGoingFrom(Node source) {
