@@ -12,7 +12,7 @@ public class Dijkstra {
 	
 
 	public Dijkstra (Graph g) {
-		this.graph = g;
+		this.graph = new Graph(g);
 	}
 
 	public void findPath (Node s, Node d) {
@@ -35,17 +35,24 @@ public class Dijkstra {
 		}
 		*/
 		s.distance = 0;
+		int currentLength = 0;
+		dijkstraTable[0].put(s, arg1)
 		
 		//dijkstraTable[0].
 		
 		while(trouve == false) {
 			
+			//la liste avec les edges de la source
+			ArrayList<Edge> list = new ArrayList<Edge>(graph.getEdgesGoingFrom(s));
+		
+			
+			//l'update
+			for(int i=0;i<list.size();++i) {
+				list.get(i).g
+			}
 			
 			
-			
-			
-			
-			
+			//on choisi le meilleur edge
 			
 			
 			

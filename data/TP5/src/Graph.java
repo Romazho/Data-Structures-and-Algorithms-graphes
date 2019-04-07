@@ -12,6 +12,10 @@ public class Graph {
 		edges = new ArrayList<Edge>();
 	}
 	
+	public Graph(Graph g) {
+		List<Node>
+	}
+	
 	public List<Edge> getEdgesGoingFrom(Node source) {
 		// A complèter 
 		List<Edge> list = new ArrayList<Edge>();
@@ -32,6 +36,10 @@ public class Graph {
 		}
 		return list;
 	}
+	
+	
+	
+	
 	
 	// Accesseurs 
 	public List<Node> getNodes() {
