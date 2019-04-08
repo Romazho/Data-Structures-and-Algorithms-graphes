@@ -87,12 +87,13 @@ public class Main {
 		
 		Dijkstra d = new Dijkstra(graph);
 		
-		d.findPath(/* Spécifiez les paramètres */);
+		d.findPath(A,G);
 		
 		d.afficherTable();
 
 		// Partie 3 : Afficher le chemin le plus court
-		System.out.println(d.afficherCourtChemin(/* Spécifiez les paramètres */));
+		System.out.println(d.afficherCourtChemin(A,G));
+		System.out.println(d.afficherEdgeList());
 	
 	}
 }
