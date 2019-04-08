@@ -23,6 +23,7 @@ public class Dijkstra {
 		dijkstraTable = new HashMap[graph.getNodes().size()];
 		dijkstraTableInverse = new HashMap[graph.getNodes().size()];
 		path = new Stack<Edge>();
+		edgeList = new Vector<Edge>();
 		
 		//4C dans le tableau a la place de 4D a la palce E5.
 		
@@ -39,23 +40,24 @@ public class Dijkstra {
 		
 		//la liste avec les edges de la source
 		ArrayList<Edge> list = new ArrayList<Edge>(graph.getEdgesGoingFrom(s));
-		
+				
 		//l'update autour du noeud source
 		for(int i=0;i<list.size();++i) {
-			List<Node> tmpNodeList = graph.getNodes();
-			int tmpIndex = tmpNodeList.indexOf(list.get(i));
+			
+			int tmpIndex = graph.getNodes().indexOf(list.get(i).getDestination());
 			// On update la distance des noeuds qui sont la destination du noeud source
 			// modifie le node et non le edge
-			tmpNodeList.get(tmpIndex).distance = list.get(i).getDistance() + s.distance;
+			graph.getNodes().get(tmpIndex).distance = list.get(i).getDistance() + s.distance;
 		}
 		
 		
 		//int currentLength = 0;
 		int iteration = 0;
 		Edge edgeA_A = new Edge(s,s,0);
-		dijkstraTable[iteration].put(s, edgeA_A);
-		dijkstraTableInverse[iteration].put(edgeA_A, s);
+		//dijkstraTable[iteration].put(s, edgeA_A);
+		//dijkstraTableInverse[iteration].put(edgeA_A, s);
 		edgeList.add(edgeA_A);
+		path.add(edgeA_A);
 		
 		iteration++;
 		
@@ -88,25 +90,28 @@ public class Dijkstra {
 
 			//il faut trouver le edge min et l'ajout� au path
 			for(int i = 0; i<graph.getEdges().size(); i++) {
-				if( (graph.getEdges().get(i).getDestination() == bestNode) && 	//est-ce que la destination est bonne
-						graph.getEdges().get(i).getDistance() < minEdgeValue	//on cherche le meilleur edge
-						)
+				if( (graph.getEdges().get(i).getDestination() == bestNode) && 			//est-ce que la destination est bonne
+						(graph.getEdges().get(i).getDistance() < minEdgeValue) &&		//on cherche le meilleur edge
+						(graph.getEdges().get(i).getSource().found == true) 			//on verifie si la source est trouvee
+						) {
 					minEdgeValue = graph.getEdges().get(i).getDistance();
 					bestEdge = graph.getEdges().get(i);
+				}
 			}
 			
 			//put DestinationNode, edge
 			edgeList.add(bestEdge);
-			dijkstraTable[iteration].put(bestNode, bestEdge);
-			dijkstraTableInverse[iteration].put(bestEdge, bestNode);
+			//dijkstraTable[iteration].put(bestNode, bestEdge);
+			//dijkstraTableInverse[iteration].put(bestEdge, bestNode);
 			
 			//dijkstraTable[iteration2-1].get(bestNode).getDestination() != bestEdge.getSource()
 			//ajout du edge au path
 			int iteration2 = iteration;
+
 				while( edgeList.get(iteration2).getDestination() != bestEdge.getSource() ) {
 					path.pop();
 					iteration2--;
-					if(iteration2 < 0)
+					if(iteration2 < 0 || path.size() <= 1 )
 						break;
 				}
 				
@@ -175,10 +180,24 @@ public class Dijkstra {
 	public String afficherCourtChemin (Node source, Node destination) {
 		// A completer
 		String chemin = "";
-		while() {
-			
+
+		for(int i=0;i<path.size();i++) {
+			chemin += path.get(i).getSource().getName() + "->" + 
+					path.get(i).getDestination().getName()+ ", ";
 		}
 		
+		return chemin;
+	}
+	
+	public String afficherEdgeList() {
+		String chemin = "";
+
+		for(int i=0;i<edgeList.size();i++) {
+			chemin += edgeList.get(i).getSource().getName() + "->" + 
+					edgeList.get(i).getDestination().getName()+ ", ";
+		}
+		
+		return chemin;
 	}
 
 	public void afficherTable () {

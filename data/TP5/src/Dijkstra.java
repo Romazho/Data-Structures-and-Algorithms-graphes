@@ -90,11 +90,13 @@ public class Dijkstra {
 
 			//il faut trouver le edge min et l'ajout� au path
 			for(int i = 0; i<graph.getEdges().size(); i++) {
-				if( (graph.getEdges().get(i).getDestination() == bestNode) && 	//est-ce que la destination est bonne
-						graph.getEdges().get(i).getDistance() < minEdgeValue	//on cherche le meilleur edge
-						)
+				if( (graph.getEdges().get(i).getDestination() == bestNode) && 			//est-ce que la destination est bonne 
+/*on triche ici un peu*/(graph.getEdges().get(i).getDistance() < minEdgeValue) &&		//on cherche le meilleur edge
+						(graph.getEdges().get(i).getSource().found == true) 			//on verifie si la source est trouvee
+						) {
 					minEdgeValue = graph.getEdges().get(i).getDistance();
 					bestEdge = graph.getEdges().get(i);
+				}
 			}
 			
 			//put DestinationNode, edge

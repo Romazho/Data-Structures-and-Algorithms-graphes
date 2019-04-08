@@ -11,7 +11,6 @@ public class Edge {
 	public Edge(Node s, Node d, int dist) {
 		this.source = s;
 		this.destination = d;
-		this.distance = dist;
 		// A completer
 	}
      
@@ -26,7 +25,7 @@ public class Edge {
 	
      public Edge (Edge edge) {
     	 this.destination = new Node(edge.destination);
-    	 this.distance =  new Integer(edge.distance); 
+    	 this.distance =  edge.distance; 
     	 this.source = new Node(edge.destination);
      }
         
