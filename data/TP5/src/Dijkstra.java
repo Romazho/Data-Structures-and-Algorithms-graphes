@@ -8,6 +8,7 @@ public class Dijkstra {
 
 	private Graph graph;
 	private Map<Node, Edge> dijkstraTable[];
+	private Map<Edge, Node> dijkstraTableInverse[];
 	private Stack<Edge> path;
 	
 
@@ -18,6 +19,7 @@ public class Dijkstra {
 	public void findPath (Node s, Node d) {
 
 		dijkstraTable = new HashMap[graph.getNodes().size()];
+		dijkstraTableInverse = new HashMap[graph.getNodes().size()];
 		path = new Stack<Edge>();
 		
 		//4C dans le tableau a la place de 4D a la palce E5.
@@ -47,10 +49,13 @@ public class Dijkstra {
 		
 		
 		//int currentLength = 0;
-		
-		
-		
 		int iteration = 0;
+		Edge edgeA_A = new Edge(s,s,0);
+		dijkstraTable[iteration].put(s, edgeA_A);
+		dijkstraTableInverse[iteration].put(edgeA_A, s);
+		
+		iteration++;
+		
 		while(d.found == false) {
 			
 			int min = INFINITY;
@@ -79,22 +84,27 @@ public class Dijkstra {
 			
 			//il faut trouver le edge min et l'ajouté au path
 			//pas bon car il faut parcourir tous les edges our tous les nodes
-			for(int i = 0; i<list.size(); i++) {
-				if(list.get(i).getDestination() == graph.getNodes().get(bestNodeIndex))
-					bestEdge = list.get(i);
+			for(int i = 0; i<graph.getEdges().size(); i++) {
+				if( (graph.getEdges().get(i).getDestination() == graph.getNodes().get(bestNodeIndex)) && //est-ce que la destination est bonne
+						graph.getEdges().get(i).getSource() == dijkstraTableInverse[iteration-1].get(graph.getEdges().get(i) )		//verifier que iteration-1 est toujours >0
+						)
+					bestEdge = list.get(i);		//à changer
 			}
 			
 			//put DestinationNode, edge
 			dijkstraTable[iteration].put(bestNode, bestEdge);
+			dijkstraTableInverse[iteration].put(bestEdge, bestNode);
 			
 			//ajout du edge au path
+			//bestEdge.getSource() != dijkstraTable[iteration2].get(bestNode).getSource()
 			//faire un while
 			int iteration2 = iteration;
-			while( bestEdge.getSource() != dijkstraTable[iteration2].get(bestNode).getSource()) {
-				path.pop();
-				iteration2--;
-			}
-			
+			if(iteration > 0)
+				while( dijkstraTable[iteration-1].get(bestNode).getDestination() != bestEdge.getSource()) {
+					path.pop();
+					iteration2--;
+				}
+				
 			do {
 				path.add(bestEdge);
 			}
