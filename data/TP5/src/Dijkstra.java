@@ -67,7 +67,7 @@ public class Dijkstra {
 		
 		iteration++;
 		
-		while(d.found == false) {
+		for(;d.found == false;iteration++) {
 			
 			int min = INFINITY;
 			
@@ -110,7 +110,7 @@ public class Dijkstra {
 			
 			//put DestinationNode, edge
 			edgeList.add(bestEdge);
-			dijkstraTable[iteration].put(bestNode, bestEdge);
+			//dijkstraTable[iteration].put(bestNode, bestEdge);
 			//dijkstraTableInverse[iteration].put(bestEdge, bestNode);
 			
 			//ajout du edge au path
@@ -127,22 +127,6 @@ public class Dijkstra {
 			//on a besoin de faire un seul add toujours...
 			
 				path.add(bestEdge);
-				
-			currentLength = 0;
-			for(int i=0;i<path.size();i++) {
-				
-				currentLength += path.get(i).getDistance();
-			}
-			
-			/*//on choisi le meilleur edge
-			//Pas sur s'il faut parcourir la liste
-			for(Edge edge : list) {
-				//A-> 		B 					bestNode
-				if(edge.getDestination() == graph.getNodes().get(bestNodeIndex)) {// Trouver le edge en fction du node
-					currentLength += edge.getDistance();
-					break;
-				}
-			}*/
 			
 			//la liste avec les edges du bestNode
 			list = new ArrayList<Edge>(graph.getEdgesGoingFrom(bestNode));
@@ -160,11 +144,18 @@ public class Dijkstra {
 				int distanceNoeud = bestNode.distance;
 				if( (distanceEdge + distanceNoeud) < graph.getNodes().get(tmpIndex).distance) {
 					graph.getNodes().get(tmpIndex).distance = list.get(i).getDistance() + bestNode.distance;
-					dijkstraTable[iteration].put(graph.getNodes().get(tmpIndex), list.get(i));
+					//dijkstraTable[iteration].put(graph.getNodes().get(tmpIndex), list.get(i));
 				}
 			}
 			
-			iteration++;
+			//on parcours tous les nodes
+			for(int i=0;i<graph.getNodes().size();i++) {
+				for(int j=0;j<list.size();j++) {
+					if(graph.getNodes().get(i) == list.get(j).getDestination())
+						dijkstraTable[iteration].put( graph.getNodes().get(i), list.get(j) );
+				}
+			}
+			
 		}
 		
 		
@@ -182,7 +173,6 @@ public class Dijkstra {
 
 	private Edge getMinimum (Edge e1, Edge e2) {
 		// A completer
-		//pas finit... faire attention aux objets nulls...
 		if( e1.getDistance() < e2.getDistance() ) {
 			return e1;
 		}
@@ -301,8 +291,8 @@ public class Dijkstra {
 			
 			
 				}
-			}
-			
+			}//for2
+			table += "\n";
 			
 			
 		}
