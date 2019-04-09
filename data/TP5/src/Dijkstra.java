@@ -12,6 +12,7 @@ public class Dijkstra {
 	private Map<Edge, Node> dijkstraTableInverse[];
 	private Stack<Edge> path;
 	private Vector<Edge> edgeList;
+	private Vector<Node> bestNodes;
 	
 
 	public Dijkstra (Graph g) {
@@ -21,9 +22,13 @@ public class Dijkstra {
 	public void findPath (Node s, Node d) {
 
 		dijkstraTable = new HashMap[graph.getNodes().size()];
-		dijkstraTableInverse = new HashMap[graph.getNodes().size()];
+		for(int i=0;i<graph.getNodes().size();i++) {
+			dijkstraTable[i] = new HashMap<Node, Edge>();
+		}
+		//dijkstraTableInverse = new HashMap[graph.getNodes().size()];
 		path = new Stack<Edge>();
 		edgeList = new Vector<Edge>();
+		bestNodes = new Vector<Node>();
 		
 		//4C dans le tableau a la place de 4D a la palce E5.
 		
@@ -51,13 +56,14 @@ public class Dijkstra {
 		}
 		
 		
-		//int currentLength = 0;
+		int currentLength = 0;
 		int iteration = 0;
 		Edge edgeA_A = new Edge(s,s,0);
-		//dijkstraTable[iteration].put(s, edgeA_A);
+		dijkstraTable[iteration].put(s, edgeA_A);	//pk il chiale ici??????
 		//dijkstraTableInverse[iteration].put(edgeA_A, s);
 		edgeList.add(edgeA_A);
 		path.add(edgeA_A);
+		bestNodes.add(s);
 		
 		iteration++;
 		
@@ -81,19 +87,22 @@ public class Dijkstra {
 				}
 			}			
 
+			bestNodes.add(bestNode);
 			
-			//le node trouvï¿½ fait partie de l'ensemble.
+			//le node trouvee fait partie de l'ensemble.
 			graph.getNodes().get(bestNodeIndex).found = true;
 			
 			Edge bestEdge = new Edge();
 			int minEdgeValue = INFINITY;
 
-			//il faut trouver le edge min et l'ajoutï¿½ au path
+			//il faut trouver le edge min et l'ajouter au path
 			for(int i = 0; i<graph.getEdges().size(); i++) {
 				if( (graph.getEdges().get(i).getDestination() == bestNode) && 			//est-ce que la destination est bonne 
-/*on triche ici un peu*/(graph.getEdges().get(i).getDistance() < minEdgeValue) &&		//on cherche le meilleur edge
-						(graph.getEdges().get(i).getSource().found == true) 			//on verifie si la source est trouvee
+						(graph.getEdges().get(i).getDistance() <= minEdgeValue) &&		//on cherche le meilleur edge
+						(graph.getEdges().get(i).getSource().found == true)		 			//on verifie si la source est trouvee
+						
 						) {
+					
 					minEdgeValue = graph.getEdges().get(i).getDistance();
 					bestEdge = graph.getEdges().get(i);
 				}
@@ -101,14 +110,13 @@ public class Dijkstra {
 			
 			//put DestinationNode, edge
 			edgeList.add(bestEdge);
-			//dijkstraTable[iteration].put(bestNode, bestEdge);
+			dijkstraTable[iteration].put(bestNode, bestEdge);
 			//dijkstraTableInverse[iteration].put(bestEdge, bestNode);
 			
-			//dijkstraTable[iteration2-1].get(bestNode).getDestination() != bestEdge.getSource()
 			//ajout du edge au path
 			int iteration2 = iteration;
 
-				while( edgeList.get(iteration2).getDestination() != bestEdge.getSource() ) {
+				while( edgeList.get(iteration2-1).getDestination() != bestEdge.getSource() ) {
 					path.pop();
 					iteration2--;
 					if(iteration2 < 0 || path.size() <= 1 )
@@ -119,8 +127,12 @@ public class Dijkstra {
 			//on a besoin de faire un seul add toujours...
 			
 				path.add(bestEdge);
-
-			
+				
+			currentLength = 0;
+			for(int i=0;i<path.size();i++) {
+				
+				currentLength += path.get(i).getDistance();
+			}
 			
 			/*//on choisi le meilleur edge
 			//Pas sur s'il faut parcourir la liste
@@ -146,8 +158,10 @@ public class Dijkstra {
 				//il faut vï¿½rifier si la nouvelle somme est plus petite et si oui on update.
 				int distanceEdge = list.get(i).getDistance();
 				int distanceNoeud = bestNode.distance;
-				if( (distanceEdge + distanceNoeud) < graph.getNodes().get(tmpIndex).distance)
+				if( (distanceEdge + distanceNoeud) < graph.getNodes().get(tmpIndex).distance) {
 					graph.getNodes().get(tmpIndex).distance = list.get(i).getDistance() + bestNode.distance;
+					dijkstraTable[iteration].put(graph.getNodes().get(tmpIndex), list.get(i));
+				}
 			}
 			
 			iteration++;
@@ -179,9 +193,9 @@ public class Dijkstra {
 	
 	public String afficherCourtChemin (Node source, Node destination) {
 		// A completer
-		String chemin = "";
+		String chemin = "Voici le chemin le plus court: \n";
 
-		for(int i=0;i<path.size();i++) {
+		for(int i=1;i<path.size();i++) {
 			chemin += path.get(i).getSource().getName() + "->" + 
 					path.get(i).getDestination().getName()+ ", ";
 		}
@@ -202,6 +216,114 @@ public class Dijkstra {
 
 	public void afficherTable () {
 		// A completer
+		String table = "Table de Dijkstra: \n" +
+		"A	B	C	D	E	F	G	\n";
 		
+		//on parcours chaque iteration de la table
+		for(int i=0;i<graph.getNodes().size();i++) {
+			
+			//on parcours toutes les nodes différents
+			for(int j=0;j<graph.getNodes().size();j++) {
+
+ 
+				switch ( graph.getNodes().get(j).getName() ) {
+				
+					case "A":
+						if(dijkstraTable[i].get(graph.getNodes().get(j)) != null) {
+							if(dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() != 99999 ) {
+								table += dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() + dijkstraTable[i].get(graph.getNodes().get(j)).getSource().getName() + "	";
+							}
+							else {
+								table += ".	";
+							}
+						}
+						break;
+					case "B":
+						if(dijkstraTable[i].get(graph.getNodes().get(j)) != null) {
+							if(dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() != 99999 ) {
+								table += dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() + dijkstraTable[i].get(graph.getNodes().get(j)).getSource().getName() + "	";
+							}
+							else {
+								table += ".	";
+							}
+						}
+						break;
+					case "C":
+						if(dijkstraTable[i].get(graph.getNodes().get(j)) != null) {
+							if(dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() != 99999 ) {
+								table += dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() + dijkstraTable[i].get(graph.getNodes().get(j)).getSource().getName() + "	";
+							}
+							else {
+								table += ".	";
+							}
+						}
+						break;
+					case "D":
+						if(dijkstraTable[i].get(graph.getNodes().get(j)) != null) {
+							if(dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() != 99999 ) {
+								table += dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() + dijkstraTable[i].get(graph.getNodes().get(j)).getSource().getName() + "	";
+							}
+							else {
+								table += ".	";
+							}
+						}
+						break;
+					case "E":
+						if(dijkstraTable[i].get(graph.getNodes().get(j)) != null) {
+							if(dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() != 99999 ) {
+								table += dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() + dijkstraTable[i].get(graph.getNodes().get(j)).getSource().getName() + "	";
+							}
+							else {
+								table += ".	";
+							}
+						}
+						break;
+					case "F":
+						if(dijkstraTable[i].get(graph.getNodes().get(j)) != null) {
+							if(dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() != 99999 ) {
+								table += dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() + dijkstraTable[i].get(graph.getNodes().get(j)).getSource().getName() + "	";
+							}
+							else {
+								table += ".	";
+							}
+						}
+						break;
+					case "G":
+						if(dijkstraTable[i].get(graph.getNodes().get(j)) != null) {
+							if(dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() != 99999 ) {
+								table += dijkstraTable[i].get(graph.getNodes().get(j)).getDistance() + dijkstraTable[i].get(graph.getNodes().get(j)).getSource().getName() + "	";
+							}
+							else {
+								table += ".	";
+							}
+						}
+						break;
+			
+			
+				}
+			}
+			
+			
+			
+		}
+		
+		
+		System.out.println(table);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

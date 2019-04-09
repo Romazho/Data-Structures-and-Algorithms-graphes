@@ -93,7 +93,7 @@ public class Main {
 
 		// Partie 3 : Afficher le chemin le plus court
 		System.out.println(d.afficherCourtChemin(A,G));
-		System.out.println(d.afficherEdgeList());
+		//System.out.println(d.afficherEdgeList());
 	
 	}
 }
